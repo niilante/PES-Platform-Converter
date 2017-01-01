@@ -290,7 +290,7 @@ namespace PESPlatformConverter
                 for (int uni = 0; uni < 2500; uni++)
                 {
                     BitUtility.write_UInt32(BitUtility.reverseEndianness32Bits(BitUtility.read_UInt32(offset)), offset);
-                    offset += 88;
+                    offset += 132;
                 }
                 #endregion uni color
 
