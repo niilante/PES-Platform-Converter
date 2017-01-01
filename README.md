@@ -1,8 +1,6 @@
-# PES Platform Converter
+# ![PLATTER (c) BETA 0.1](http://i.imgur.com/O0AWGrk.png)
 
-PES Platform Converter (*Platter*) is an application written in C# that helps user to convert any Pro Evolution Soccer files to a desired platform.
-
-*The project is currently on development stage, expected to be released by December 2016*.
+PES Platform Converter (*Platter* ©) is an application that helps user to convert any kind of Pro Evolution Soccer files to a desired platform.
 
 
 ## Team
