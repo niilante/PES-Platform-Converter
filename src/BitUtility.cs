@@ -40,35 +40,30 @@ namespace PESPlatformConverter
     class BitUtility
     {
         /// <summary>
-        /// Bit converting algorithm
+        /// Bit converting algorithm.
         /// </summary>
-        /// <param name="box">Unique pattern recognition keys</param>
-        /// <param name="len">Lenght of bytes to be overwritten</param>
-        /// <param name="copyOfOffset">Current offset position</param>
-        /// <param name="code">0 = XBOX to PC || 1 = PC to XBOX</param>
+        /// <param name="box">Unique pattern recognition keys.</param>
+        /// <param name="len">Lenght of bytes to be overwritten.</param>
+        /// <param name="copyOfOffset">Current offset position.</param>
+        /// <param name="code">Specifies conversion method.</param>
         internal static void bitConverter(int[] box, int len, long copyOfOffset, int code)
         {
-            long temp = copyOfOffset;
-            if (code == 1) { copyOfOffset += len - 1; }
-
             byte[] arr = new byte[len];
-
-            int index;
-            if (code == 0) index = 0;
-            else index = box.Length - 1;
-
+            var index = (code == 0) ? 0 : box.Length - 1;
             int head = 0, tail = head + box[index] - 1, used = 0;
+            var temp = copyOfOffset;
+            if (code == 1) { copyOfOffset += len - 1; }
 
             for (int i = 0; i < len; i++)
             {
-                string s = "";
+                var s = "";
 
                 while (s.Length < 8)
                 {
-                    string num = Convert.ToString(SaveDataConverter.allBytes[copyOfOffset], 2);
+                    var num = Convert.ToString(SaveDataConverter.allBytes[copyOfOffset], 2);
                     while (num.Length < 8) { num = '0' + num; }
 
-                    int nextOffset = 1;
+                    var nextOffset = 1;
                     while (num.Length - 1 < tail)
                     {
                         string num2;
@@ -80,8 +75,8 @@ namespace PESPlatformConverter
                         nextOffset++;
                     }
 
-                    int j;
-                    for (j = tail; (j >= head && s.Length < 8); j--) { s = num[j] + s; }
+                    var j = tail;
+                    for (; (j >= head && s.Length < 8); j--) { s = num[j] + s; }
 
                     if (j >= head)
                     {
@@ -124,88 +119,88 @@ namespace PESPlatformConverter
         }
 
         /// <summary>
-        /// Write 32-bits number to the array
+        /// Writes 32-bits number to the array.
         /// </summary>
-        /// <param name="x">32-bits number</param>
-        /// <param name="init">Initial offset</param>
+        /// <param name="x">The 32-bits number.</param>
+        /// <param name="init">Initial offset position.</param>
         internal static void write_UInt32(UInt32 x, long init)
         {
-            int count = 0;
+            var count = 0;
             byte[] hex = BitConverter.GetBytes(x);
             for (long i = init; i < init + 4; i++) { SaveDataConverter.allBytes[i] = hex[count]; count++; }
         }
 
         /// <summary>
-        /// Write 16-bits number to the array
+        /// Writes 16-bits number to the array.
         /// </summary>
-        /// <param name="x">16-bits number</param>
-        /// <param name="init">Initial offset</param>
+        /// <param name="x">The 16-bits number.</param>
+        /// <param name="init">Initial offset position.</param>
         internal static void write_UInt16(UInt16 x, long init)
         {
-            int count = 0;
+            var count = 0;
             byte[] hex = BitConverter.GetBytes(x);
             for (long i = init; i < init + 2; i++) { SaveDataConverter.allBytes[i] = hex[count]; count++; }
         }
 
         /// <summary>
-        /// Read 32-bits array
+        /// Reads 32-bits array.
         /// </summary>
-        /// <param name="init">Initial offset</param>
-        /// <returns>32-bits integer</returns>
+        /// <param name="init">Initial offset position.</param>
+        /// <returns>32-bits integer.</returns>
         internal static UInt32 read_UInt32(long init)
         {
-            int count = 0; byte[] chunk = new byte[4];
+            var count = 0; byte[] chunk = new byte[4];
             for (long i = init; i < init + 4; i++) { chunk[count] = SaveDataConverter.allBytes[i]; count++; }
             return BitConverter.ToUInt32(chunk, 0);
         }
 
         /// <summary>
-        /// Read 16-bits array
+        /// Reads 16-bits array.
         /// </summary>
-        /// <param name="init">Initial offset</param>
-        /// <returns>16-bits integer</returns>
+        /// <param name="init">Initial offset position.</param>
+        /// <returns>16-bits integer.</returns>
         internal static UInt16 read_UInt16(long init)
         {
-            int count = 0; byte[] chunk = new byte[2];
+            var count = 0; byte[] chunk = new byte[2];
             for (long i = init; i < init + 2; i++) { chunk[count] = SaveDataConverter.allBytes[i]; count++; }
             return BitConverter.ToUInt16(chunk, 0);
         }
 
         /// <summary>
-        /// Reverse endianness byte order for 8-bits number
+        /// Reverse endianness byte order for 8-bits number.
         /// </summary>
-        /// <param name="value">8-bits number</param>
-        /// <returns>Reversed byte order</returns>
+        /// <param name="value">The 8-bits number.</param>
+        /// <returns>Reversed byte order.</returns>
         internal static byte reverseEndianness8Bits(byte value)
         {
             return (byte)((value & 15) << 4 | (value & 240) >> 4);
         }
 
         /// <summary>
-        /// Reverse endianness byte order for 16-bits number
+        /// Reverse endianness byte order for 16-bits number.
         /// </summary>
-        /// <param name="value">16-bits number</param>
-        /// <returns>Reversed byte order</returns>
+        /// <param name="value">The 16-bits number.</param>
+        /// <returns>Reversed byte order.</returns>
         internal static UInt16 reverseEndianness16Bits(UInt16 value)
         {
             return (UInt16)((value & 0xFF) << 8 | (value & 0xFF00) >> 8);
         }
 
         /// <summary>
-        /// Reverse endianness byte order for 32-bits number
+        /// Reverse endianness byte order for 32-bits number.
         /// </summary>
-        /// <param name="value">32-bits number</param>
-        /// <returns>Reversed byte order</returns>
+        /// <param name="value">The 32-bits number.</param>
+        /// <returns>Reversed byte order.</returns>
         internal static UInt32 reverseEndianness32Bits(UInt32 value)
         {
             return (value & 0x000000FF) << 24 | (value & 0x0000FF00) << 8 | (value & 0x00FF0000) >> 8 | (value & 0xFF000000) >> 24;
         }
 
         /// <summary>
-        /// Reverse endianness byte order for 64-bits number
+        /// Reverse endianness byte order for 64-bits number.
         /// </summary>
-        /// <param name="value">64-bits number</param>
-        /// <returns>Reversed byte order</returns>
+        /// <param name="value">The 64-bits number.</param>
+        /// <returns>Reversed byte order.</returns>
         internal static UInt64 reverseEndianness64Bits(UInt64 value)
         {
             return (value & 0x00000000000000FF) << 56 | (value & 0x000000000000FF00) << 40 | (value & 0x0000000000FF0000) << 24 |
@@ -214,10 +209,10 @@ namespace PESPlatformConverter
         }
 
         /// <summary>
-        /// Reverse bits order for 8-bits number
+        /// Reverse bits order for 8-bits number.
         /// </summary>
-        /// <param name="inv8">8-bits number</param>
-        /// <returns>Reversed bits order</returns>
+        /// <param name="inv8">The 8-bits number.</param>
+        /// <returns>Reversed bits order.</returns>
         internal static byte reverse8Bits(byte inv8)
         {
             byte count = 7;
@@ -235,10 +230,10 @@ namespace PESPlatformConverter
         }
 
         /// <summary>
-        /// Reverse bits order for 16-bits number
+        /// Reverse bits order for 16-bits number.
         /// </summary>
-        /// <param name="inv16">16-bits number</param>
-        /// <returns>Reversed bits order</returns>
+        /// <param name="inv16">The 16-bits number.</param>
+        /// <returns>Reversed bits order.</returns>
         internal static UInt16 reverse16Bits(UInt16 inv16)
         {
             byte count = 15;
@@ -256,22 +251,22 @@ namespace PESPlatformConverter
         }
 
         /// <summary>
-        /// Rotate bits to the left
+        /// Rotate bits to the left.
         /// </summary>
-        /// <param name="value">8-bits number</param>
-        /// <param name="shift">Number of shift to be operated</param>
-        /// <returns>Rotated bits</returns>
+        /// <param name="value">The 8-bits number.</param>
+        /// <param name="shift">Number of shift to be performed.</param>
+        /// <returns>Rotated bits.</returns>
         internal static byte rol(byte value, int shift)
         {
             return (byte)((value << shift) | (value >> (8 - shift)));
         }
 
         /// <summary>
-        /// Rotate bits to the right
+        /// Rotate bits to the right.
         /// </summary>
-        /// <param name="value">8-bits number</param>
-        /// <param name="shift">Number of shift to be operated</param>
-        /// <returns>Rotated bits</returns>
+        /// <param name="value">The 8-bits number.</param>
+        /// <param name="shift">Number of shift to be performed.</param>
+        /// <returns>Rotated bits.</returns>
         internal static byte ror(byte value, int shift)
         {
             return (byte)((value >> shift) | (value << (8 - shift)));
